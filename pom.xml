@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jctools</groupId>
-    <artifactId>jctools-parent</artifactId>
+    <artifactId>jctools-wrapper</artifactId>
     <packaging>pom</packaging>
     <version>2.2-SNAPSHOT</version>
-    <name>JCTools Parent</name>
+    <name>JCTools Wrapper</name>
     <organization>
         <url>https://github.com/JCTools</url>
     </organization>
@@ -37,23 +37,8 @@
         </developer>
     </developers>
 
-    <prerequisites>
-        <maven>3.3.9</maven>
-    </prerequisites>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.6</java.version>
-        <java.test.version>1.8</java.test.version>
-
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
-        <maven.compiler.testSource>${java.test.version}</maven.compiler.testSource>
-        <maven.compiler.testTarget>${java.test.version}</maven.compiler.testTarget>
-
-        <hamcrest.version>1.3</hamcrest.version>
-        <junit.version>4.12</junit.version>
-        <guava-testlib.version>21.0</guava-testlib.version>
     </properties>
 
     <modules>
@@ -65,69 +50,78 @@
         <module>jctools-build</module>
     </modules>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                    <testSource>${maven.compiler.testSource}</testSource>
-                    <testTarget>${maven.compiler.testTarget}</testTarget>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M1</version>
-                <executions>
-                    <execution>
-                        <id>enforce-java</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireJavaVersion>
-                                    <version>${java.test.version}</version>
-                                </requireJavaVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-              <groupId>org.eluder.coveralls</groupId>
-              <artifactId>coveralls-maven-plugin</artifactId>
-              <version>4.3.0</version>
-            </plugin>
-            <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-              <version>0.7.9</version>
-              <executions>
-                <execution>
-                  <id>prepare-agent</id>
-                  <goals>
-                    <goal>prepare-agent</goal>
-                  </goals>
-                </execution>
-              </executions>
-            </plugin>
-        </plugins>
-    </build>
+    <dependencies>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-experimental</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-channels</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-benchmarks</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-concurrency-test</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jctools</groupId>
+        <artifactId>jctools-build</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
 
-    <profiles>
-        <profile>
-            <!-- For use by eclipse users using the m2 plugin that gets the source 
-                and target versions mixed up. With this you can go to right click on the projects, 
-                select "Maven" and "Select Profiles" then check "eclipse-dev". -->
-            <id>eclipse-dev</id>
-            <properties>
-                <java.version>${java.test.version}</java.version>
-            </properties>
-        </profile>
-    </profiles>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.9</version>
+        <reportSets>
+          <reportSet></reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <configuration>
+          <aggregate>true</aggregate>
+          <linkXRef>false</linkXRef>
+          <showSuccess>false</showSuccess>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.2</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>report-aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>
